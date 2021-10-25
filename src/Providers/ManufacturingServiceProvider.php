@@ -55,10 +55,10 @@ class ManufacturingServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            module_path($this->moduleName, 'config/config.php') => config_path($this->moduleNameLower . '.php'),
+            module_path($this->moduleName, 'config/config.php') => config_path($this->moduleName . '.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            module_path($this->moduleName, 'config/config.php'), $this->moduleNameLower
+            module_path($this->moduleName, 'config/config.php'), $this->moduleName
         );
     }
 
@@ -70,11 +70,11 @@ class ManufacturingServiceProvider extends ServiceProvider
     public function registerViews()
     {
         $this->loadViewsFrom(
-            [module_path($this->moduleNameLower, 'resources/views')],
+            [module_path($this->moduleName, 'resources/views')],
             $this->moduleNameLower
         );
     }
-    
+
     /**
      * Register translations.
      *

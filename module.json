@@ -1,6 +1,6 @@
 {
     "name": "man",
-    "alias": "Manufacturing",
+    "alias": "man",
     "description": "Module Manufacturing manages Factory, Workshop, Process, Device Data, communicate with device",
     "keywords": [],
     "priority": 1,
@@ -9,7 +9,9 @@
         "Goodcatch\\Modules\\Manufacturing\\Providers\\ManufacturingServiceProvider"
     ],
     "aliases": {},
-    "files": [],
+    "files": [
+        "src/helpers.php"
+    ],
     "version": "0.1.0",
     "requires": [],
     "type": 1

@@ -13,13 +13,14 @@ class PermissionTableSeeder extends Seeder
     const MODULE_ALIAS = 'man';
 
     const MODULE_API_PREFIX = 'man';
-    const MODULE_MENU_TYPE = '2110';
+    const MODULE_MENU_TYPE = 121;
 
     public function getSeedsMenus (){
         return [
             [
                 'name' => self::MODULE_NAME,
                 'icon' => 'icon-gc-' . self::MODULE_ALIAS,
+                'is_type' => self::MODULE_MENU_TYPE,
                 'children' => [
                     [
                         'name' => '主数据',

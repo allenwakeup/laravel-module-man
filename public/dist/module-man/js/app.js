@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"077c5c95f723b95e60b2","1":"b6601cc4573d21fb5ecd","2":"bae3d4bbdb66b6052496","3":"c3bb2a269e5a4978dc84","4":"7711f773aac2ccbf40d4"}[chunkId] + ""
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js?id=" + {"0":"c522ee6b0eb6b0fd5c19","1":"b6601cc4573d21fb5ecd","2":"4beeaba48e11376f0cd7","3":"1eb2990b54f7dfa6bdb0","4":"c5c049b06f2df98b090f","5":"2b6d31e41d9e1801e746","6":"2fff67a9432db2606efa","7":"6a2fb63829bdd5ce934f","8":"dd4afa4c3e586f9ac127","9":"5c7ad55e96deee2814a3","10":"a8d4bf18e764452f9360","11":"50ddb95406bfc57da86d"}[chunkId] + ""
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -71676,10 +71676,15 @@ var baseUrl = window.baseUrl;
   /**
    * 模块化接口
    */
-  // 生产中心
+  // 生产中心主数据
   // 基地
-  'adminBases': baseUrl + 'Admin/bases' // 基地
-
+  'adminBases': baseUrl + 'Admin/bases',
+  // 基地
+  'adminFactories': baseUrl + 'Admin/factories',
+  // 车间
+  'adminWorkshops': baseUrl + 'Admin/workshops',
+  // 工序
+  'adminProcesses': baseUrl + 'Admin/processes'
 });
 
 /***/ }),
@@ -72536,7 +72541,7 @@ vue__WEBPACK_IMPORTED_MODULE_12___default.a.use(vue_router__WEBPACK_IMPORTED_MOD
     path: '/Admin/goodcatch/m/man/*',
     name: '404',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! @/views/Error/404 */ "./resources/js/views/Error/404.vue"));
+      return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! @/views/Error/404 */ "./resources/js/views/Error/404.vue"));
     }
   }])
 }));
@@ -72578,15 +72583,16 @@ __webpack_require__.r(__webpack_exports__);
     path: "/Admin/goodcatch/m/man/index",
     name: "goodcatch_m_man_default",
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! @/views/Admin/default */ "./resources/js/views/Admin/default.vue"));
+      return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! @/views/Admin/default */ "./resources/js/views/Admin/default.vue"));
     }
   }, // 打开默认页面
+  // 主数据
   // 基地
   {
     path: "/Admin/bases",
     name: "admin_bases_index",
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! @/views/Admin/bases/index */ "./resources/js/views/Admin/bases/index.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! @/views/Admin/bases/index */ "./resources/js/views/Admin/bases/index.vue"));
     }
   }, // 基地列表
   {
@@ -72595,7 +72601,52 @@ __webpack_require__.r(__webpack_exports__);
     component: function component() {
       return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! @/views/Admin/bases/form */ "./resources/js/views/Admin/bases/form.vue"));
     }
-  } // 基地编辑
+  }, // 基地编辑
+  // 工厂
+  {
+    path: "/Admin/factories",
+    name: "admin_factories_index",
+    component: function component() {
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! @/views/Admin/factories/index */ "./resources/js/views/Admin/factories/index.vue"));
+    }
+  }, // 工厂列表
+  {
+    path: "/Admin/factories/form/:id?",
+    name: "admin_factories_form",
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 5).then(__webpack_require__.bind(null, /*! @/views/Admin/factories/form */ "./resources/js/views/Admin/factories/form.vue"));
+    }
+  }, // 工厂编辑
+  // 车间
+  {
+    path: "/Admin/workshops",
+    name: "admin_workshops_index",
+    component: function component() {
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! @/views/Admin/workshops/index */ "./resources/js/views/Admin/workshops/index.vue"));
+    }
+  }, // 车间列表
+  {
+    path: "/Admin/workshops/form/:id?",
+    name: "admin_workshops_form",
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! @/views/Admin/workshops/form */ "./resources/js/views/Admin/workshops/form.vue"));
+    }
+  }, // 车间编辑
+  // 工序
+  {
+    path: "/Admin/processes",
+    name: "admin_processes_index",
+    component: function component() {
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(8)]).then(__webpack_require__.bind(null, /*! @/views/Admin/processes/index */ "./resources/js/views/Admin/processes/index.vue"));
+    }
+  }, // 工序列表
+  {
+    path: "/Admin/processes/form/:id?",
+    name: "admin_processes_form",
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! @/views/Admin/processes/form */ "./resources/js/views/Admin/processes/form.vue"));
+    }
+  } // 工序编辑
   ]
 }]);
 

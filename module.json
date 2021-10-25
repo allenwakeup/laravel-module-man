@@ -1,0 +1,17 @@
+{
+    "name": "man",
+    "alias": "Manufacturing",
+    "description": "Module Manufacturing manages Factory, Workshop, Process, Device Data, communicate with device",
+    "keywords": [],
+    "priority": 1,
+    "order": 99,
+    "providers": [
+        "Goodcatch\\Modules\\Manufacturing\\Providers\\ManufacturingServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "version": "0.1.0",
+    "requires": [],
+    "type": 1
+}
+

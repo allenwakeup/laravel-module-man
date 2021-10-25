@@ -1,0 +1,42 @@
+{
+    "name": "goodcatch/laravel-module-manufacturing",
+    "description": "goodcatch laravel module - Manufacturing, collecting data from workshop",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "allen",
+            "email": "ali@goodcatch.cn",
+            "homepage": "http://note.goodcatch.cn/it/dev-laravel/laravel-modules/laravel-module-man",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "goodcatch/laravel-module-core": "dev-master",
+        "webpatser/laravel-uuid": "^3.0",
+        "tymon/jwt-auth": "1.*@rc"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "illuminate/support": "^8.0",
+        "laravel/framework": "^8.0",
+        "laravel/helpers": "^1.4.1"
+
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Goodcatch\\Modules\\Manufacturing\\": "src"
+        },
+        "classmap": [
+            "database/seeds"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

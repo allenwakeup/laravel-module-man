@@ -1,6 +1,6 @@
 <?php
 
-namespace Goodcatch\Modules\Manufacturing\Http\Resources\Admin\FactoryResource;
+namespace Goodcatch\Modules\Manufacturing\Http\Resources\Admin\WorkshopResource;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

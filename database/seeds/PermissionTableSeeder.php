@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Goodcatch\Modules\Manufacturing\Database\Seeders;
 
 use Goodcatch\Modules\Base\Traits\PermissionSeedsTrait;
 use Illuminate\Database\Seeder;

@@ -7,7 +7,7 @@ namespace Goodcatch\Modules\Manufacturing\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Goodcatch\Modules\Manufacturing\Http\Requests\Admin\WorkshopRequest;
-use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\FactoryResource\ProcessCollection;
+use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\ProcessResource\ProcessCollection;
 use Goodcatch\Modules\Manufacturing\Repositories\Admin\ProcessRepository;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;

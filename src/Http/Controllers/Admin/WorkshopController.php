@@ -7,7 +7,7 @@ namespace Goodcatch\Modules\Manufacturing\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Goodcatch\Modules\Manufacturing\Http\Requests\Admin\WorkshopRequest;
-use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\FactoryResource\WorkshopCollection;
+use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\WorkshopResource\WorkshopCollection;
 use Goodcatch\Modules\Manufacturing\Repositories\Admin\WorkshopRepository;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;

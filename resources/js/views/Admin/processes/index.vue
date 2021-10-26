@@ -17,7 +17,7 @@
                 <template slot="title" slot-scope="currentPageData">
                     <search :search-config="search" @searchParams="onSearchParams"/>
                     <div class="admin_table_handle_btn">
-                        <a-button @click="$router.push('/Admin/processes/form')" type="primary" icon="plus">添加</a-button>
+                        <a-button @click="$router.push('/Admin/goodcatch/m/man/processes/form')" type="primary" icon="plus">添加</a-button>
                         <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
                     </div>
                 </template>
@@ -28,7 +28,7 @@
 
 
                 <span slot="action" slot-scope="rows">
-                    <a-button icon="edit" @click="$router.push('/Admin/processes/form/'+rows.id)">编辑</a-button>
+                    <a-button icon="edit" @click="$router.push('/Admin/goodcatch/m/man/processes/form/'+rows.id)">编辑</a-button>
                 </span>
             </a-table>
             <div class="admin_pagination" v-if="total>0">

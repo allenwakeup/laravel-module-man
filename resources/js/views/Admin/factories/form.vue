@@ -23,7 +23,7 @@
                     </a-select>
 
                 </a-form-model-item>
-                <a-form-model-item label="编码" prop="name">
+                <a-form-model-item label="编码" prop="code">
                     <a-input v-model="form.code"></a-input>
                 </a-form-model-item>
                 <a-form-model-item label="名称" prop="name">
@@ -57,6 +57,7 @@ export default {
     data() {
       return {
           form:{
+              base_id: undefined,
               code: '',
               name: '',
               short: '',
@@ -80,9 +81,8 @@ export default {
                   {required: true, message: '请输入名称', trigger: 'blur'},
                   {min: 2, max: 20, message: '至少两个字，最多20个字', trigger: 'blur'},
               ]
-
-
           },
+          bases: [],
           id:0,
       };
     },
@@ -148,7 +148,7 @@ export default {
                 this.id = this.$route.params.id;
                 this.getForm();
             }
-
+            this.getBaseSelector({data_type:'select'});
         },
 
 

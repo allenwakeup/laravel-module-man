@@ -18,7 +18,7 @@ class ProcessRepository extends Repository
     public static function list($perPage, $condition = [], $keyword = null)
     {
         return Process::query()
-            ->with(['workshop.factory', 'item'])
+            ->with('workshop.factory.base')
             ->where(function ($query) use ($condition, $keyword) {
                 self::buildQuery($query, $condition);
                 if (! empty ($keyword))
@@ -34,6 +34,10 @@ class ProcessRepository extends Repository
 
     public static function select ($condition = [], $select = 'base', $keyword = null)
     {
+
+        if(is_null($select)){
+            $select = 'process';
+        }
 
         $select_class = [
             'base' => Base::class,

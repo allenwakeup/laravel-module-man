@@ -6,7 +6,6 @@
 namespace Goodcatch\Modules\Manufacturing\Model\Admin;
 
 use Goodcatch\Modules\Manufacturing\Model\Model;
-use Goodcatch\Modules\Core\Model\Admin\ModelMapping;
 
 class Factory extends Model
 {
@@ -47,7 +46,7 @@ class Factory extends Model
 
     public function base ()
     {
-        return $this->belongsTo('Goodcatch\Modules\Core\Model\Admin\Base', 'base_id', 'id');
+        return $this->belongsTo('Goodcatch\Modules\Manufacturing\Model\Admin\Base', 'base_id', 'id');
     }
 
     public function workshops ()

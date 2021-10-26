@@ -6,7 +6,7 @@
 namespace Goodcatch\Modules\Manufacturing\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Goodcatch\Modules\Manufacturing\Http\Requests\Admin\WorkshopRequest;
+use Goodcatch\Modules\Manufacturing\Http\Requests\Admin\ProcessRequest;
 use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\ProcessResource\ProcessCollection;
 use Goodcatch\Modules\Manufacturing\Repositories\Admin\ProcessRepository;
 use Illuminate\Database\QueryException;
@@ -24,7 +24,7 @@ class ProcessController extends Controller
      *
      * @return array|\Illuminate\Http\Response
      */
-    public function index(WorkshopRequest $request)
+    public function index(ProcessRequest $request)
     {
         $data_type = $request->get ('data_type');
         $condition = $request->validated();
@@ -51,10 +51,10 @@ class ProcessController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  WorkshopRequest  $request
+     * @param  ProcessRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(WorkshopRequest $request)
+    public function store(ProcessRequest $request)
     {
         try{
             $data = ProcessRepository::add($request->validated());
@@ -78,11 +78,11 @@ class ProcessController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  WorkshopRequest  $request
+     * @param  ProcessRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(WorkshopRequest $request, $id)
+    public function update(ProcessRequest $request, $id)
     {
 
         try{

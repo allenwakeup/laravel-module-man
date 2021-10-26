@@ -10,7 +10,7 @@
                 <a-form-model-item label="工厂" prop="factory_id">
                     <a-cascader :load-data="loadFactory" :options="factories" placeholder="请选择工厂" change-on-select @change="onChangeFactory" />
                 </a-form-model-item>
-                <a-form-model-item label="编码" prop="name">
+                <a-form-model-item label="编码" prop="code">
                     <a-input v-model="form.code"></a-input>
                 </a-form-model-item>
                 <a-form-model-item label="名称" prop="name">
@@ -44,6 +44,7 @@ export default {
     data() {
       return {
           form:{
+              factory_id: undefined,
               code: '',
               name: '',
               short: '',
@@ -113,7 +114,7 @@ export default {
 
         },
         // 工厂级联下拉框 --------------------------
-        onChangeFactory(value) {
+        onChangeFactory(row) {
             this.form.factory_id = row[1];
         },
         loadFactory(selectedOptions){
@@ -123,7 +124,7 @@ export default {
 
             targetOption.loading = true;
 
-            this.$get(this.$api.moduleAdminWorkshops, params).then(res=>{
+            this.$get(this.$api.moduleAdminFactories, params).then(res=>{
                 targetOption.loading = false;
                 targetOption.children = res.data;
                 this.factories = [...this.factories];
@@ -142,6 +143,14 @@ export default {
                 this.id = this.$route.params.id;
                 this.getForm();
             }
+
+            this.$get(this.$api.moduleAdminFactories, {data_type: 'cascader', cascader: 'base'}).then(res=>{
+
+                if(res.code === 200){
+                    this.factories = res.data;
+                }
+
+            });
 
         },
 

@@ -23,7 +23,7 @@
                 </template>
 
                 <span slot="workshop" slot-scope="record" >
-                    {{ (record.workshop && record.factory && record.workshop.factory.base && record.workshop.factory.base.name) ? (record.workshop.factory.base.name + record.workshop.factory.name + record.workshop.name) : '--' }}
+                    {{ (record.workshop && record.workshop.factory && record.workshop.factory.base && record.workshop.factory.base.name) ? (record.workshop.factory.base.name + record.workshop.factory.name + record.workshop.name) : '--' }}
                 </span>
 
 

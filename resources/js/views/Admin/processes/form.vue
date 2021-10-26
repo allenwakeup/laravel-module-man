@@ -10,7 +10,7 @@
                 <a-form-model-item label="车间" prop="workshop_id">
                     <a-cascader :load-data="loadWorkshop" :options="workshops" placeholder="请选择车间" change-on-select @change="onChangeWorkshop" />
                 </a-form-model-item>
-                <a-form-model-item label="编码" prop="name">
+                <a-form-model-item label="编码" prop="code">
                     <a-input v-model="form.code"></a-input>
                 </a-form-model-item>
                 <a-form-model-item label="名称" prop="name">
@@ -44,6 +44,7 @@ export default {
     data() {
       return {
           form:{
+              workshop_id: undefined,
               code: '',
               name: '',
               short: '',
@@ -114,8 +115,8 @@ export default {
 
         },
         // 车间级联下拉框 --------------------------
-        onChangeFactory(value) {
-            this.form.factory_id = row[1];
+        onChangeWorkshop(row) {
+            this.form.workshop_id = row[2];
         },
         loadWorkshop(selectedOptions){
             const targetOption = selectedOptions[selectedOptions.length - 1];
@@ -143,6 +144,14 @@ export default {
                 this.id = this.$route.params.id;
                 this.getForm();
             }
+
+            this.$get(this.$api.moduleAdminWorkshops, {data_type: 'cascader', cascader: 'base'}).then(res=>{
+
+                if(res.code === 200){
+                    this.workshops = res.data;
+                }
+
+            });
 
         },
 

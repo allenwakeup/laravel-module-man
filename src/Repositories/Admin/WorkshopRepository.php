@@ -17,7 +17,7 @@ class WorkshopRepository extends Repository
     public static function list($perPage, $condition = [], $keyword = null)
     {
         return Workshop::query()
-            ->with(['factory.area'])
+            ->with(['factory.base'])
             ->where(function ($query) use ($condition, $keyword) {
                 self::buildQuery($query, $condition);
                 if (! empty ($keyword))
@@ -31,6 +31,10 @@ class WorkshopRepository extends Repository
 
     public static function select ($condition = [], $select = 'base', $keyword = null)
     {
+
+        if(is_null($select)){
+            $select = 'workshop';
+        }
 
         $select_class = [
             'base' => Base::class,

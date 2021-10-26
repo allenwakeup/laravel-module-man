@@ -31,6 +31,10 @@ class FactoryRepository extends Repository
     public static function select ($condition = [], $select = 'base', $keyword = null)
     {
 
+        if(is_null($select)){
+            $select = 'factory';
+        }
+
         $select_class = [
             'base' => Base::class,
             'factory' => Factory::class

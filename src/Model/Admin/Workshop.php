@@ -5,7 +5,7 @@
 
 namespace Goodcatch\Modules\Manufacturing\Model\Admin;
 
-use Goodcatch\Modules\Core\Model\Admin\ModelMapping;
+use Goodcatch\Modules\Manufacturing\Model\Model;
 
 class Workshop extends Model
 {

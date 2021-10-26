@@ -37,6 +37,7 @@
 
 <script type="text/javascript">
     window.baseUrl = '{{$base_url}}';
-    window.apiTimeout = {{empty($api_timeout) ? 10 * 1000 : false}};
+    window.apiTimeout = {{isset($api_timeout) ? $api_timeout : false}};
+    window.menuType = {{isset($menu_type) ? $menu_type : false}};
 </script>
 <script src="{{ mix('js/app.js','dist/module-man') }}"></script>

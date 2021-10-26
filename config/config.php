@@ -7,5 +7,9 @@ return [
         'guards' => [
             'api' => 'device'
         ]
+    ],
+
+    'menu' => [
+        'type' => 121
     ]
 ];

@@ -13,42 +13,43 @@ class PermissionTableSeeder extends Seeder
     const MODULE_ALIAS = 'man';
 
     const MODULE_API_PREFIX = 'man';
-    const MODULE_MENU_TYPE = 121;
 
     public function getSeedsMenus (){
+        $menu_type = config('Manufacturing.menu.type');
         return [
             [
                 'name' => self::MODULE_NAME,
                 'icon' => 'icon-gc-' . self::MODULE_ALIAS,
-                'is_type' => self::MODULE_MENU_TYPE,
+                'is_type' => $menu_type,
+                'link' => $this->getSeedsModuleApiUri(self::MODULE_ALIAS, 'index'),
                 'children' => [
                     [
                         'name' => '主数据',
                         'icon' => 'icon-gc-basic',
-                        'is_type' => self::MODULE_MENU_TYPE,
+                        'is_type' => $menu_type,
                         'children' => [
                             [
                                 'name' => '生产基地',
                                 'icon' => 'icon-gc-bases',
-                                'is_type' => self::MODULE_MENU_TYPE,
+                                'is_type' => $menu_type,
                                 'link' => $this->getSeedsModuleApiUri(self::MODULE_ALIAS, 'bases'),
                             ],
                             [
                                 'name' => '工厂管理',
                                 'icon' => 'icon-gc-factories',
-                                'is_type' => self::MODULE_MENU_TYPE,
+                                'is_type' => $menu_type,
                                 'link' => $this->getSeedsModuleApiUri(self::MODULE_ALIAS, 'factories'),
                             ],
                             [
                                 'name' => '车间管理',
                                 'icon' => 'icon-gc-workshops',
-                                'is_type' => self::MODULE_MENU_TYPE,
+                                'is_type' => $menu_type,
                                 'link' => $this->getSeedsModuleApiUri(self::MODULE_ALIAS, 'workshops'),
                             ],
                             [
                                 'name' => '工序管理',
                                 'icon' => 'icon-gc-processes',
-                                'is_type' => self::MODULE_MENU_TYPE,
+                                'is_type' => $menu_type,
                                 'link' => $this->getSeedsModuleApiUri(self::MODULE_ALIAS, 'processes'),
                             ]
                         ]

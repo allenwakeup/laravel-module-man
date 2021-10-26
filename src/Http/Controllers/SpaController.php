@@ -16,6 +16,9 @@ class SpaController extends Controller
     }
 
     protected function moduleIndex(array $view_content){
+
+        $view_content = array_merge($view_content, ['menu_type' => config('Manufacturing.menu.type')]);
+
         return view('man::index', $view_content);
     }
 }

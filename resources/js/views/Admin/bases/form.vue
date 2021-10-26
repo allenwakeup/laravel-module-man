@@ -70,7 +70,7 @@ export default {
 
             this.$refs.form.validate(valid => {
                 if(valid){
-                    let api = this.$apiHandle(this.$api.adminBases,this.id);
+                    let api = this.$apiHandle(this.$api.moduleAdminBases,this.id);
                     if(api.status){
                         this.$put(api.url,this.form).then(res=>{
                             if(res.code === 200){
@@ -99,7 +99,7 @@ export default {
 
         },
         getForm(){
-            this.$get(this.$api.adminBases+'/'+this.id).then(res=>{
+            this.$get(this.$api.moduleAdminBases+'/'+this.id).then(res=>{
                 this.form = res.data;
             })
         },

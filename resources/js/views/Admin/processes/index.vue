@@ -55,7 +55,7 @@ export default {
                   label: '车间',
                   name: 'workshop_id',
                   type: 'select-remote',
-                  data: this.$api.adminWorkshops
+                  data: this.$api.moduleAdminWorkshops
               },
               {
                   label: '编码',
@@ -135,7 +135,7 @@ export default {
                 cancelText: '取消',
                 onOk:()=> {
                     let ids = this.selectedRowKeys.join(',');
-                    this.$delete(this.$api.adminProcesses+'/'+ids).then(res=>{
+                    this.$delete(this.$api.moduleAdminProcesses+'/'+ids).then(res=>{
                         if(res.code === 200){
                             this.onload();
                             this.$message.success('删除成功');
@@ -150,7 +150,7 @@ export default {
         getList(search = {}){
             this.list_loading = true;
             const params = Object.assign({}, search, this.params);
-            this.$get(this.$api.adminProcesses, params).then(res=>{
+            this.$get(this.$api.moduleAdminProcesses, params).then(res=>{
                 if (res.code === 200){
                     this.total = res.data.total;
                     this.list = res.data.data;

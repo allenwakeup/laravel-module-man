@@ -21,12 +21,12 @@ export default {
      */
     // 生产中心主数据
     // 基地
-    'adminBases' : baseUrl + 'Admin/bases',
+    "moduleAdminBases": baseUrl + "Admin/goodcatch/m/man/bases",
     // 基地
-    'adminFactories' : baseUrl + 'Admin/factories',
+    'moduleAdminFactories' : baseUrl + 'Admin/goodcatch/m/man/factories',
     // 车间
-    'adminWorkshops' : baseUrl + 'Admin/workshops',
+    'moduleAdminWorkshops' : baseUrl + 'Admin/goodcatch/m/man/workshops',
     // 工序
-    'adminProcesses' : baseUrl + 'Admin/processes',
+    'moduleAdminProcesses' : baseUrl + 'Admin/goodcatch/m/man/processes',
 
 };

@@ -93,7 +93,7 @@ export default {
 
             this.$refs.form.validate(valid => {
                 if(valid){
-                    let api = this.$apiHandle(this.$api.adminFactories,this.id);
+                    let api = this.$apiHandle(this.$api.moduleAdminFactories,this.id);
                     if(api.status){
                         this.$put(api.url,this.form).then(res=>{
                             if(res.code === 200){
@@ -129,7 +129,7 @@ export default {
             this.form.base_id = value;
         },
         getBaseSelector(params){
-            this.$get(this.$api.adminBases, params).then(res=>{
+            this.$get(this.$api.moduleAdminBases, params).then(res=>{
                 if(res.code === 200 && res.data && res.data){
                     this.bases = res.data;
                 }
@@ -137,7 +137,7 @@ export default {
         },
         // -------------------------- 生产基地下拉框
         getForm(){
-            this.$get(this.$api.adminFactories+'/'+this.id).then(res=>{
+            this.$get(this.$api.moduleAdminFactories+'/'+this.id).then(res=>{
                 this.form = res.data;
             })
         },

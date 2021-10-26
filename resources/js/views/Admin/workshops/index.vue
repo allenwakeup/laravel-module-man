@@ -57,7 +57,7 @@ export default {
                   label: '工厂',
                   name: 'factory_id',
                   type: 'select-remote',
-                  data: this.$api.adminFactories
+                  data: this.$api.moduleAdminFactories
               },
               {
                   label: '编码',
@@ -137,7 +137,7 @@ export default {
                 cancelText: '取消',
                 onOk:()=> {
                     let ids = this.selectedRowKeys.join(',');
-                    this.$delete(this.$api.adminWorkshops+'/'+ids).then(res=>{
+                    this.$delete(this.$api.moduleAdminWorkshops+'/'+ids).then(res=>{
                         if(res.code === 200){
                             this.onload();
                             this.$message.success('删除成功');
@@ -152,7 +152,7 @@ export default {
         getList(search = {}){
             this.list_loading = true;
             const params = Object.assign({}, search, this.params);
-            this.$get(this.$api.adminWorkshops, params).then(res=>{
+            this.$get(this.$api.moduleAdminWorkshops, params).then(res=>{
                 if (res.code === 200){
                     this.total = res.data.total;
                     this.list = res.data.data;

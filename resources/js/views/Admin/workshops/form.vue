@@ -84,7 +84,7 @@ export default {
 
             this.$refs.form.validate(valid => {
                 if(valid){
-                    let api = this.$apiHandle(this.$api.adminWorkshops,this.id);
+                    let api = this.$apiHandle(this.$api.moduleAdminWorkshops,this.id);
                     if(api.status){
                         this.$put(api.url,this.form).then(res=>{
                             if(res.code === 200){
@@ -123,7 +123,7 @@ export default {
 
             targetOption.loading = true;
 
-            this.$get(this.$api.adminWorkshops, params).then(res=>{
+            this.$get(this.$api.moduleAdminWorkshops, params).then(res=>{
                 targetOption.loading = false;
                 targetOption.children = res.data;
                 this.factories = [...this.factories];
@@ -131,7 +131,7 @@ export default {
         },
         // -------------------------- 工厂级联下拉框
         getForm(){
-            this.$get(this.$api.adminWorkshops+'/'+this.id).then(res=>{
+            this.$get(this.$api.moduleAdminWorkshops+'/'+this.id).then(res=>{
                 this.form = res.data;
             })
         },

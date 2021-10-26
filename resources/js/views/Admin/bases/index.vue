@@ -126,7 +126,7 @@ export default {
                 cancelText: '取消',
                 onOk:()=> {
                     let ids = this.selectedRowKeys.join(',');
-                    this.$delete(this.$api.adminBases+'/'+ids).then(res=>{
+                    this.$delete(this.$api.moduleAdminBases+'/'+ids).then(res=>{
                         if(res.code === 200){
                             this.onload();
                             this.$message.success('删除成功');
@@ -141,7 +141,7 @@ export default {
         getList(search = {}){
             this.list_loading = true;
             const params = Object.assign({}, search, this.params);
-            this.$get(this.$api.adminBases, params).then(res=>{
+            this.$get(this.$api.moduleAdminBases, params).then(res=>{
                 if (res.code === 200){
                     this.total = res.data.total;
                     this.list = res.data.data;

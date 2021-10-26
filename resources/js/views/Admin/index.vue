@@ -241,7 +241,7 @@ export default {
     created() {
         this.get_menus();
         // console.log(this.$route.name)
-        if(this.$route.name === 'goodcatch_m_core_default'){
+        if(this.$route.name === 'goodcatch_m_man_default'){
             this.isAdminDefault = true;
         }else{
             this.isAdminDefault = false;
@@ -260,7 +260,7 @@ export default {
     },
     beforeRouteUpdate (to, from, next) {
         // console.log(to,from);
-        if(to.name === 'goodcatch_m_core_default'){
+        if(to.name === 'goodcatch_m_man_default'){
             this.isAdminDefault = true;
         }else{
             this.isAdminDefault = false;

@@ -32,73 +32,46 @@ class ProcessRepository extends Repository
             ->paginate($perPage);
     }
 
-    public static function select ($condition = [], $select = 'base', $keyword = null)
+    public static function select ($condition = [], $keyword = null)
     {
-
-        if(is_null($select)){
-            $select = 'process';
-        }
-
-        $select_class = [
-            'base' => Base::class,
-            'factory' => Factory::class,
-            'workshop' => Workshop::class,
-            'process' => Process::class
-        ][$select];
-
-        if (isset ($select_class))
-        {
-            $select_query = $select_class::query ()
-                ->select([
-                    'name',
-                    'name as label',
-                    'name as title',
-                    'name as text',
-                    'id as value',
-                    \DB::raw("'{$select}' as cascader")
-                ]);
-            if(!empty($keyword)){
-                $select_query->with(['workshop.factory.base']);
-                self::buildQuery($select_query, [
-                    'name' => $keyword
-                ]);
-            }
-            return $select_query
-                ->where(function ($query) use ($condition, $keyword) {
-                    self::buildQuery ($query, $condition);
-
-                    if(!empty($keyword)){
-                        $query->orWhereHas('workshop', function(Builder $has) use($keyword) {
-                            $has->where('man_workshops.name', 'like', "%$keyword%");
-                        });
-                        $query->orWhereHas('factory', function(Builder $has) use($keyword) {
-                            $has->where('man_factories.name', 'like', "%$keyword%");
-                        });
-                        $query->orWhereHas('base', function(Builder $has) use($keyword) {
-                            $has->where('man_bases.name', 'like', "%$keyword%");
-                        });
+        return Process::query ()
+            ->with('workshop.factory.base')
+            ->where(function ($query) use ($condition, $keyword) {
+                if (! empty ($keyword))
+                {
+                    $keywords = explode(' ', $keyword);
+                    foreach($keywords as $w){
+                        if(!empty(trim($w))){
+                            $w = trim($w);
+                            $query->where(function (Builder $and) use ($w){
+                                $and->where('name', 'like', '%' . $w . '%');
+                                $and->orWhereHas('workshop', function(Builder $has) use($w) {
+                                    $has->where('man_workshops.name', 'like', "%$w%");
+                                });
+                                $and->orWhereHas('workshop.factory', function(Builder $has) use($w) {
+                                    $has->where('man_factories.name', 'like', "%$w%");
+                                });
+                                $and->orWhereHas('workshop.factory.base', function(Builder $has) use($w) {
+                                    $has->where('man_bases.name', 'like', "%$w%");
+                                });
+                            });
+                        }
                     }
+                }
 
-                })
-                ->orderBy('order')
-                ->get()
-                ->transform (function ($item) use ($select) {
-                    $item->value = $item->id;
-                    $item->title = $item->name;
-                    $item->text = $item->name;
-                    $item->label = $item->name;
-                    if ($select !== 'process')
-                    {
-                        $item->children = [];
-                        $item->value .= $select;
-                    }
-                    $item->cascader = $select;
-                    return $item;
-                });
-        }
-        return \collect([]);
+            })
+            ->orderBy('order')
+            ->get()
+            ->transform (function ($item) {
+                $item->value = $item->id;
+                $item->title = $item->name;
+                $item->text = $item->name;
+                $item->label = $item->name;
 
+                return $item;
+            });
     }
+
 
     public static function cascader ($condition = [], $select = 'base', $keyword = null)
     {

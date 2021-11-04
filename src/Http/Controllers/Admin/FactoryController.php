@@ -27,8 +27,7 @@ class FactoryController extends Controller
         $condition = $request->validated();
 
         if ($data_type === 'select') {
-            $condition = $request->only ([ 'base_id' ]);
-            $data = FactoryRepository::select ($condition, $request->get($data_type), $request->keyword);
+            $data = FactoryRepository::select ($condition, $request->keyword);
         } else if ($data_type === 'cascader') {
             $condition = $request->only ([ 'base_id' ]);
             $data = FactoryRepository::cascader ($condition, $request->get($data_type), $request->keyword);

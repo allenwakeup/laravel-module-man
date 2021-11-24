@@ -4,16 +4,16 @@
 
         <!-- 菜单 start -->
         <a-layout-sider v-if="!subMenu" class="admin_menu" v-model="collapsed" :trigger="null" collapsible>
-            <div class="base_shadow admin_menu_title"><span :class="collapsed?'hiddens':'shows'">核心模块</span></div>
+            <div class="base_shadow admin_menu_title"><span :class="collapsed?'hiddens':'shows'">生产制造</span></div>
             <a-menu mode="inline" theme="dark" :default-selected-keys="defaultSelectedKeys" :open-keys.sync="defaultOpenKeys">
-                <a-menu-item @click="to_nav('/Admin/index', 0)"><a-font class="afont menu_icon" type="icon-gc-home" /><span>系统首页</span></a-menu-item>
-                <a-sub-menu v-for="v in menus" :key="v.id + ''">
+                <a-menu-item @click="toNav('/Admin/index', 0)"><a-font class="afont menu_icon" type="icon-gc-home" /><span>系统首页</span></a-menu-item>
+                <a-sub-menu v-if="v.is_type >= 100" v-for="v in menus" :key="v.id + ''">
                     <span slot="title"><a-font class="afont menu_icon" :type="v.icon||'icon-gc-home'" /><span>{{v.name}}</span></span>
                     <template v-for="vo in (v.children||[])">
-                        <a-menu-item v-if="$isEmpty(vo.children) || vo.children.length===0" :key="vo.id + ''"  @click="to_nav(vo.link, vo.id)"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" />{{vo.name}}</a-menu-item>
+                        <a-menu-item v-if="$isEmpty(vo.children) || vo.children.length===0" :key="vo.id + ''"  @click="toNav(vo.link, vo.id)"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" />{{vo.name}}</a-menu-item>
                         <a-sub-menu v-else :key="vo.id + ''">
                             <span slot="title"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" /><span>{{vo.name}}</span></span>
-                            <a-menu-item  @click="to_nav(vo2.link, vo2.id)" v-for="vo2 in (vo.children||[])" :key="vo2.id + ''"><a-font class="afont menu_icon" v-if="!!vo2.icon" :type="vo2.icon" />{{vo2.name}}</a-menu-item>
+                            <a-menu-item  @click="toNav(vo2.link, vo2.id)" v-for="vo2 in (vo.children||[])" :key="vo2.id + ''"><a-font class="afont menu_icon" v-if="!!vo2.icon" :type="vo2.icon" />{{vo2.name}}</a-menu-item>
                         </a-sub-menu>
                     </template>
                 </a-sub-menu>
@@ -28,13 +28,14 @@
                 <a-icon class="base_font_size item_left float_left" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggleCollapsed"/>
                 <div class="top-menu">
                     <a-menu v-if="topMenus.length > 0" mode="horizontal">
-                        <a-menu-item @click="to_nav(t.link, t.id)" v-for="t in topMenus" :key="t.id"><a-font class="afont menu_icon" v-if="!!t.icon" :type="t.icon" />{{t.name}}</a-menu-item>
+                        <a-menu-item @click="toNav(t.link, t.id)" v-for="t in topMenus" :key="t.id"><a-font class="afont menu_icon" v-if="!!t.icon" :type="t.icon" />{{t.name}}</a-menu-item>
                     </a-menu>
                 </div>
                 <div class="item_right float_right">
                     <a-dropdown>
                         <div class="admin_top_person" @click="e => e.preventDefault()">
-                            <a-avatar class="avatar" size="small" icon="user" />
+                            <a-icon  v-show="isBusy" type="loading" class="icon-busy" />
+                            <a-avatar v-show="!isBusy" class="avatar" size="small" icon="user" :src="userInfo.avatar" />
                             <span>{{userInfo.nickname}}</span>
                         </div>
                         <a-menu slot="overlay">
@@ -53,6 +54,17 @@
                     </a-dropdown>
                 </div>
                 <div class="clear"></div>
+                <a-progress v-if="isBusy"
+                            class="progress-bar"
+                            :show-info="false"
+                            :stroke-width="5"
+                            :stroke-color="{
+                            from: '#108ee9',
+                            to: '#87d068',
+                        }"
+                            :percent="progressBar.percent"
+                            status="active"
+                />
             </a-layout-header>
 
             <!-- 主体内容 -->
@@ -74,16 +86,16 @@
         <!-- 手机菜单 start -->
         <a-drawer :body-style="{ padding: 0, height: '100%' }" placement="left" :closable="false" :visible="drawerShow" @close="onClose">
             <div class="admin_menu mobile">
-                <div class="admin_menu_title"><span :class="'shows'">核心模块</span></div>
+                <div class="admin_menu_title"><span :class="'shows'">生产制造</span></div>
                 <a-menu mode="inline" theme="dark">
-                    <a-menu-item @click="to_nav('/Admin/index')"><a-font class="afont menu_icon" type="icon-gc-home" /><span>系统首页</span></a-menu-item>
+                    <a-menu-item @click="toNav('/Admin/index')"><a-font class="afont menu_icon" type="icon-gc-home" /><span>系统首页</span></a-menu-item>
                     <a-sub-menu v-for="v in menus" :key="v.id">
                         <span slot="title"><a-font class="afont menu_icon" :type="v.icon||'icon-gc-home'" /><span>{{v.name}}</span></span>
                         <template v-for="vo in (v.children||[])">
-                            <a-menu-item v-if="$isEmpty(vo.children) || vo.children.length===0" :key="vo.id"  @click="to_nav(vo.link)"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" />{{vo.name}}</a-menu-item>
+                            <a-menu-item v-if="$isEmpty(vo.children) || vo.children.length===0" :key="vo.id"  @click="toNav(vo.link)"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" />{{vo.name}}</a-menu-item>
                             <a-sub-menu v-else :key="vo.id">
                                 <span slot="title"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" /><span>{{vo.name}}</span></span>
-                                <a-menu-item  @click="to_nav(vo2.link)" v-for="vo2 in (vo.children||[])" :key="vo2.id"><a-font class="afont menu_icon" v-if="!!vo2.icon" :type="vo2.icon" />{{vo2.name}}</a-menu-item>
+                                <a-menu-item  @click="toNav(vo2.link)" v-for="vo2 in (vo.children||[])" :key="vo2.id"><a-font class="afont menu_icon" v-if="!!vo2.icon" :type="vo2.icon" />{{vo2.name}}</a-menu-item>
                             </a-sub-menu>
                         </template>
                     </a-sub-menu>
@@ -117,9 +129,13 @@ export default {
             drawerShow:false,
             screenWidth: document.body.clientWidth, // 屏幕宽度
             menus:[],
-            topMenus: [],
             isRefresh:true,
-            defaultOpenKeys: []
+            defaultOpenKeys: [],
+            progressBar: {
+                percent: 0,
+                interval: -1
+            },
+            topMenus: []
         };
     },
     provide () {
@@ -127,14 +143,35 @@ export default {
             reload: this.reload
         }
     },
-    watch: {},
+    watch: {
+        isBusy(oldVal, newVal ){
+            if(newVal){
+                this.progressBar.percent = 0;
+                this.clearProgressInterval();
+            }
+            if(oldVal){
+                this.progressBar.interval = window.setInterval(() => {
+                    this.progressBar.percent = Math.min(100, this.progressBar.percent + Math.ceil(Math.random()*10));
+                    if(this.progressBar.percent === 100){
+                        window.setTimeout(() => {
+                            // 5秒钟后 强制关闭
+                            this.clearProgressInterval();
+                            // 重置状态
+                            this.setTopBusy(false);
+                        }, 5000)
+                    }
+                }, 1000)
+            }
+        }
+    },
     computed:{
         ...adminLoginStore.mapGetters([
             'isLogin',
             'userInfo'
         ]),
         ...adminCommonStore.mapGetters([
-            'pref'
+            'pref',
+            'isBusy'
         ]),
         defaultSelectedKeys() {
             return this.pref.menu ? this.pref.menu.selected : []
@@ -144,9 +181,10 @@ export default {
         ...adminLoginStore.mapActions({
             storeLogout: 'logout'
         }),
-        ...adminCommonStore.mapActions([
-            'selectMenu'
-        ]),
+        ...adminCommonStore.mapActions({
+            selectMenu: 'selectMenu',
+            setTopBusy: 'gettingBusy'
+        }),
         // 收缩菜单
         toggleCollapsed() {
             this.collapsed = !this.collapsed;
@@ -157,7 +195,8 @@ export default {
         onClose() {
             this.drawerShow = false;
         },
-        get_menus(){
+        getMenus(){
+            this.setTopBusy(true);
             this.$get(this.$api.adminMenus).then(res=>{
                 if(window.menuType){
                     const menus = res.data.filter(menu => menu.is_type === window.menuType);
@@ -173,6 +212,7 @@ export default {
                 if(this.pref.menu){
                     if(!this.$isEmpty(this.pref.menu.route)){
                         if(this.$route.path !== this.pref.menu.route){
+                            this.setTopBusy(false);
                             this.$router.push(this.pref.menu.route);
                         }
                     }
@@ -180,9 +220,10 @@ export default {
                         this.defaultOpenKeys = this.pref.menu.selected;
                     }
                 }
-            });
+                this.setTopBusy(false);
+            }, e => this.setTopBusy(false));
         },
-        to_nav(path, id){
+        toNav(path, id){
             const that = this;
 
             this.$hasRoute(this.$router, {path})
@@ -194,16 +235,19 @@ export default {
                     })
                     that.$router.push(path);
                 }).catch(e => {
-                console.log('路由不存在' + path)
-                that.selectMenu({
-                    selected: getMenuPathById(that.menus, id),
-                    route: path
-                })
-                window.location.href = path;
-            });
+                    console.log('路由不存在' + path)
+                    that.selectMenu({
+                        selected: getMenuPathById(that.menus, id),
+                        route: path
+                    })
+                    window.location.href = path;
+                });
         },
-
-
+        clearProgressInterval(){
+            if(this.progressBar.interval > 0){
+                window.clearInterval(this.progressBar.interval)
+            }
+        },
         // 判断是否宽度小于多少
         onScreenWidth(){
             if(this.screenWidth<=950 && this.screenWidth>=576){
@@ -239,7 +283,7 @@ export default {
 
     },
     created() {
-        this.get_menus();
+        this.getMenus();
         // console.log(this.$route.name)
         if(this.$route.name === 'goodcatch_m_man_default'){
             this.isAdminDefault = true;
@@ -266,6 +310,9 @@ export default {
             this.isAdminDefault = false;
         }
         next();
+    },
+    beforeDestroy() {
+        this.clearProgressInterval();
     }
 };
 </script>
@@ -285,10 +332,10 @@ export default {
     &:after{
         display: block;
         clear: both;
-        content:'',
+        content:'';
     }
     .admin_right_top{
-        padding: 0 35px;
+        padding: 0 0px;
         box-sizing: border-box;
         line-height: 50px;
         height: 50px;
@@ -319,11 +366,23 @@ export default {
             .admin_top_person{
                 cursor: pointer;
                 .avatar{margin-top: -4px;margin-right: 4px;}
+                .icon-busy {
+                    margin-top: -4px;
+                    margin-right: 4px;
+                    font-size: 1.5em;
+                    color: #13c2c2;
+
+
+                }
             }
         }
         .top-menu{
             width: 70%;
             float: left;
+        }
+        .progress-bar{
+            position:absolute;
+            margin-top: -12px;
         }
 
     }
@@ -381,8 +440,8 @@ export default {
         text-align: center;
 
         img{
-            width: 30px;
-            height: 30px;
+            height: 48px;
+            width: 48px;
             margin-top: -5px;
         }
         span{
@@ -403,5 +462,9 @@ export default {
     }
 
 }
-
+.icon-busy ::v-deep .anticon-spin {
+    animation: loadingCircle 0.3s infinite linear;
+    -webkit-animation: loadingCircle 0.3s infinite linear;
+    -moz-animation: loadingCircle 0.3s infinite linear;
+}
 </style>

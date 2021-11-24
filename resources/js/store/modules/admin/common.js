@@ -1,13 +1,14 @@
 import {USER_INFO, STORE_ADMIN, USER_PREFERENCE} from '@/plugins/constant'
 import {moduleStorageHelpers} from '@/plugins/function'
-import {MUT_SET_PREFERENCE} from '@/store/mutation-types'
+import {MUT_SET_PREFERENCE, MUT_SET_BUSY} from '@/store/mutation-types'
 
 const {readStorage} = moduleStorageHelpers(STORE_ADMIN)
 
 // initial state
 const state = {
     common: {},
-    preferences: {}
+    preferences: {},
+    busy: false
 }
 
 // getters
@@ -33,7 +34,9 @@ const getters = {
             callback(getters.pref[key]);
         }
         return getters.pref[key];
-    }
+    },
+
+    isBusy: state => state.busy === true
 }
 
 // actions
@@ -54,6 +57,9 @@ const actions = {
             route: data.route
         })
         dispatch('setPref', {menu})
+    },
+    gettingBusy({commit}, data) {
+        commit(MUT_SET_BUSY, data)
     }
 }
 
@@ -61,6 +67,9 @@ const actions = {
 const mutations = {
     [MUT_SET_PREFERENCE](state, payload){
         state.preferences = payload;
+    },
+    [MUT_SET_BUSY](state, payload){
+        state.busy = payload;
     }
 }
 

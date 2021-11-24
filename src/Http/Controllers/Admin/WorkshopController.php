@@ -19,6 +19,7 @@ class WorkshopController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param WorkshopRequest $request
      * @return array|\Illuminate\Http\Response
      */
     public function index(WorkshopRequest $request)
@@ -30,7 +31,7 @@ class WorkshopController extends Controller
             $condition = $request->only ([ 'base_id', 'factory_id' ]);
             $data = WorkshopRepository::select ($condition, $request->get($data_type), $request->keyword);
         } else if ($data_type === 'cascader') {
-            $condition = $request->only ([ 'base_id' ]);
+            $condition = $request->only ([ 'base_id', 'factory_id' ]);
             $data = WorkshopRepository::cascader ($condition, $request->get($data_type), $request->keyword);
         } else {
             $data = WorkshopRepository::list(

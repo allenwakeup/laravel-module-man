@@ -33,7 +33,7 @@ class ProcessController extends Controller
             $condition = $request->only ([ 'base_id', 'factory_id', 'workshop_id' ]);
             $data = ProcessRepository::select ($condition, $request->get($data_type), $request->keyword);
         } else if ($data_type === 'cascader') {
-            $condition = $request->only ([ 'base_id' ]);
+            $condition = $request->only ([ 'base_id', 'factory_id', 'workshop_id' ]);
             $data = ProcessRepository::cascader ($condition, $request->get($data_type), $request->keyword);
         } else {
             $data = ProcessRepository::list(

@@ -6,11 +6,11 @@
 namespace Goodcatch\Modules\Manufacturing\Model\Admin;
 
 use Goodcatch\Modules\Manufacturing\Model\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Process extends Model
 {
-    const STATUS_ENABLE = 1;
-    const STATUS_DISABLE = 0;
+    use SoftDeletes;
 
     protected $guarded = [];
 

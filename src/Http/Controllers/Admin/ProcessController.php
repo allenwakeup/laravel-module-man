@@ -30,8 +30,7 @@ class ProcessController extends Controller
         $condition = $request->validated();
 
         if ($data_type === 'select') {
-            $condition = $request->only ([ 'base_id', 'factory_id', 'workshop_id' ]);
-            $data = ProcessRepository::select ($condition, $request->get($data_type), $request->keyword);
+            $data = ProcessRepository::select ($condition, $request->keyword);
         } else if ($data_type === 'cascader') {
             $condition = $request->only ([ 'base_id', 'factory_id', 'workshop_id' ]);
             $data = ProcessRepository::cascader ($condition, $request->get($data_type), $request->keyword);

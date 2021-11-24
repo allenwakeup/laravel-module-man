@@ -28,7 +28,7 @@
                 <a-icon class="base_font_size item_left float_left" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggleCollapsed"/>
                 <div class="top-menu">
                     <a-menu v-if="topMenus.length > 0" mode="horizontal">
-                        <a-menu-item @click="to_nav(t.link, k)" v-for="t in topMenus" :key="k"><a-font class="afont menu_icon" v-if="!!t.icon" :type="t.icon" />{{t.name}}</a-menu-item>
+                        <a-menu-item @click="to_nav(t.link, t.id)" v-for="t in topMenus" :key="t.id"><a-font class="afont menu_icon" v-if="!!t.icon" :type="t.icon" />{{t.name}}</a-menu-item>
                     </a-menu>
                 </div>
                 <div class="item_right float_right">

@@ -9,6 +9,7 @@ use Goodcatch\Modules\Manufacturing\Model\Admin\Base;
 use Goodcatch\Modules\Manufacturing\Model\Admin\Factory;
 use Goodcatch\Modules\Manufacturing\Repositories\BaseRepository as Repository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class FactoryRepository extends Repository
 {
@@ -28,59 +29,44 @@ class FactoryRepository extends Repository
             ->paginate($perPage);
     }
 
-    public static function select ($condition = [], $select = 'base', $keyword = null)
+    public static function select ($condition = [], $keyword = null)
     {
 
-        if(is_null($select)){
-            $select = 'factory';
-        }
+        return Factory::query ()
+            ->with('base')
+            ->where(function ($query) use ($condition, $keyword) {
+                $keywords = explode(' ', $keyword);
+                foreach($keywords as $w){
+                    $w = trim($w);
+                    $query->where(function (Builder $and) use ($condition, $w){
+                        if(!empty($w)){
+                            $and->where('name', 'like', '%' . $w . '%');
+                        }
+                        if(!empty($w)) {
+                            $and->orWhereHas('base', function(Builder $has) use($w) {
+                                $has->where('man_bases.name', 'like', "%$w%");
+                            });
+                        }
 
-        $select_class = [
-            'base' => Base::class,
-            'factory' => Factory::class
-        ][$select];
+                        if(Arr::has($condition, 'base_id') && !empty(Arr::get($condition, 'base_id'))) {
+                            $and->whereHas('base', function(Builder $has) use ($condition) {
+                                $has->where('man_bases.id', Arr::get($condition, 'base_id'));
+                            });
+                        }
+                    });
 
-        if (isset ($select_class))
-        {
-            $select_query = $select_class::query ()
-                ->select([
-                    'name',
-                    'name as label',
-                    'name as title',
-                    'name as text',
-                    'id as value',
-                    \DB::raw("'{$select}' as cascader")
-                ]);
-            if(!empty($keyword)){
-                $select_query->with(['base']);
-                self::buildQuery($select_query, [
-                    'name' => $keyword
-                ]);
-            }
-            return $select_query
-                ->where(function ($query) use ($condition, $keyword) {
-                    self::buildQuery ($query, $condition);
-
-                    if(!empty($keyword)){
-                        $query->orWhereHas('base', function(Builder $has) use($keyword) {
-                            $has->where('man_bases.name', 'like', "%$keyword%");
-                        });
-                    }
-
-                })
-                ->orderBy('order')
-                ->get()
-                ->transform (function ($item) use ($select) {
-                if ($select !== 'factory')
-                {
-                    $item->children = [];
-                    $item->value .= $select;
                 }
+            })
+            ->orderBy('order')
+            ->get()
+            ->transform (function ($item) {
+                $item->value = $item->id;
+                $item->title = $item->name;
+                $item->text = $item->name;
+                $item->label = $item->name;
+
                 return $item;
             });
-
-        }
-        return \collect([]);
 
     }
 

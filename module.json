@@ -1,5 +1,5 @@
 {
-    "name": "man",
+    "name": "Manufacturing",
     "alias": "man",
     "description": "Module Manufacturing manages Factory, Workshop, Process, Device Data, communicate with device",
     "keywords": [],

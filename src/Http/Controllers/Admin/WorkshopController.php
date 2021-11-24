@@ -29,7 +29,7 @@ class WorkshopController extends Controller
 
         if ($data_type === 'select') {
             $condition = $request->only ([ 'base_id', 'factory_id' ]);
-            $data = WorkshopRepository::select ($condition, $request->get($data_type), $request->keyword);
+            $data = WorkshopRepository::select ($condition, $request->keyword);
         } else if ($data_type === 'cascader') {
             $condition = $request->only ([ 'base_id', 'factory_id' ]);
             $data = WorkshopRepository::cascader ($condition, $request->get($data_type), $request->keyword);

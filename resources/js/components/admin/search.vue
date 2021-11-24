@@ -50,8 +50,8 @@
                 </template>
                 <a-col :md="!advanced && 8 || 12" :sm="12" style="padding-top:3px;">
                     <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-                        <a-button icon="search" @click="search()">查询</a-button>
-                        <a-button style="margin-left: 8px" @click="() => this.params = {}">重置</a-button>
+                        <a-button icon="search" @click="search">查询</a-button>
+                        <a-button style="margin-left: 8px" @click="reset">重置</a-button>
                         <a v-if="searchConfig2.length>0" @click="advanced = !advanced" style="margin-left: 8px">
                         {{ advanced ? '收起' : '展开' }}
                         <a-icon :type="advanced ? 'up' : 'down'"/>
@@ -121,6 +121,10 @@ export default {
             });
 
             this.$emit('searchParams', params);
+        },
+        reset(){
+            this.params = {};
+            this.$emit('searchParams', {});
         },
         dateFormat(times){
             return moment(times).format('YYYY-MM-DD');

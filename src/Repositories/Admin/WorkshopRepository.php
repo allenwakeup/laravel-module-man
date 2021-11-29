@@ -44,21 +44,21 @@ class WorkshopRepository extends Repository
                             $and->where('name', 'like', '%' . $w . '%');
                         }
                         if(!empty($w)) {
-                            $and->orWhereHas('workshop.factory', function(Builder $has) use($w) {
+                            $and->orWhereHas('factory', function(Builder $has) use($w) {
                                 $has->where('man_factories.name', 'like', "%$w%");
                             });
-                            $and->orWhereHas('workshop.factory.base', function(Builder $has) use($w) {
+                            $and->orWhereHas('factory.base', function(Builder $has) use($w) {
                                 $has->where('man_bases.name', 'like', "%$w%");
                             });
                         }
 
                         if(Arr::has($condition, 'factory_id') && !empty(Arr::get($condition, 'factory_id'))) {
-                            $and->whereHas('workshop.factory', function(Builder $has) use ($condition) {
+                            $and->whereHas('factory', function(Builder $has) use ($condition) {
                                 $has->where('man_factories.id', Arr::get($condition, 'factory_id'));
                             });
                         }
                         if(Arr::has($condition, 'base_id') && !empty(Arr::get($condition, 'base_id'))) {
-                            $and->whereHas('workshop.factory.base', function(Builder $has) use ($condition) {
+                            $and->whereHas('factory.base', function(Builder $has) use ($condition) {
                                 $has->where('man_bases.id', Arr::get($condition, 'base_id'));
                             });
                         }

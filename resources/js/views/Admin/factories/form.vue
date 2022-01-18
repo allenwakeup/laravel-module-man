@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="admin_table_page_title">
-            <a-button @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
+            <a-button type="link" @click="$router.back()" class="float_right" icon="arrow-left">返回</a-button>
             工厂编辑
         </div>
         <div class="unline underm"></div>

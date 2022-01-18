@@ -8,19 +8,25 @@
 
         <div class="admin_table_list">
             <a-table
-                    :columns="columns"
-                    :data-source="list"
-                    :scroll="{ x: 1400 }"
-                    :loading="list_loading"
+                    size="small"
+                    :columns="table.columns"
+                    :data-source="table.data"
+                    :scroll="{ y: sysWindowHeight - 400 }"
+                    :loading="table.loading"
                     :pagination="false"
-                    :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+                    :row-selection="{ selectedRowKeys: table.selectedRowKeys, onChange: handleTableRowKeysChange }"
                     row-key="id">
 
                 <template slot="title" slot-scope="currentPageData">
-                    <search :search-config="search" @searchParams="onSearchParams"/>
+                    <search
+                            :search-config="search.fields"
+                            :auto-params="search.params"
+                            @searchParams="handleTableSearchParams"
+                            :export-config="exporting"
+                            @handleExport="handleTableExport"/>
                     <div class="admin_table_handle_btn">
                         <a-button @click="$router.push('/Admin/goodcatch/m/man/bases/form')" type="primary" icon="plus">添加</a-button>
-                        <a-button class="admin_delete_btn" type="danger" icon="delete" @click="del">批量删除</a-button>
+                        <a-button class="admin_delete_btn" type="danger" icon="delete" @click="handleRemoveTableRows">批量删除</a-button>
                     </div>
                 </template>
 
@@ -29,8 +35,8 @@
                     <a-button icon="edit" @click="$router.push('/Admin/goodcatch/m/man/bases/form/'+rows.id)">编辑</a-button>
                 </span>
             </a-table>
-            <div class="admin_pagination" v-if="total>0">
-                <a-pagination v-model="params.page" :page-size.sync="params.per_page" :total="total" @change="onChange" show-less-items />
+            <div class="admin_pagination" v-if="table.total > 0">
+                <a-pagination v-model="table.params.page" :page-size.sync="table.params.per_page" :total="table.total" @change="handleTablePageChange" show-less-items />
             </div>
         </div>
     </div>
@@ -38,124 +44,100 @@
 
 <script>
 import Search from '@/components/admin/search'
+import { MixinList } from '@/plugins/mixins/admin'
 export default {
+    mixins: [ MixinList ],
     components: { Search },
     props: {},
     data() {
       return {
-          params:{
-              page:1,
-              per_page:30,
+          table: {
+              actions: {
+                  list: this.$api.moduleAdminBases,
+                  remove: this.$api.moduleAdminBases
+              },
+              columns: [
+                  {title:'#',dataIndex:'id',fixed:'left', width: 60},
+                  {title:'编码',dataIndex:'code'},
+                  {title:'名称',dataIndex:'name'},
+                  {title:'简称',dataIndex:'short'},
+                  {title:'别名',dataIndex:'alias'},
+                  {title:'显示名称',dataIndex:'display'},
+                  {title:'描述',dataIndex:'description', width: 120},
+                  {title:'创建时间',dataIndex:'created_at'},
+                  {title:'更新时间',dataIndex:'updated_at'},
+                  {title:'操作',fixed:'right',scopedSlots: { customRender: 'action' }},
+              ],
           },
-          total:0, //总页数
-          search: [
-              {
-                  label: '编码',
-                  name: 'code',
-                  type: 'text'
-              },
-              {
-                  label: '名称',
-                  name: 'name',
-                  type: 'text'
-              },
-              {
-                  label: '简称',
-                  name: 'short',
-                  type: 'text'
-              },
-              {
-                  label: '别名',
-                  name: 'alias',
-                  type: 'text'
-              },
-              {
-                  label: '显示名称',
-                  name: 'display',
-                  type: 'text'
-              },
-              {
-                  label: '描述',
-                  name: 'description',
-                  type: 'text'
-              }
-          ],
-          list_loading: false,
-            searchParams: {},
-          selectedRowKeys:[], // 被选择的行
-          columns:[
-              {title:'#',dataIndex:'id',fixed:'left', width: 60},
-              {title:'编码',dataIndex:'code', width: 120},
-              {title:'名称',dataIndex:'name', width: 120},
-              {title:'简称',dataIndex:'short', width: 120},
-              {title:'别名',dataIndex:'alias', width: 120},
-              {title:'显示名称',dataIndex:'display', width: 120},
-              {title:'描述',dataIndex:'description', width: 120},
-              {title:'创建时间',dataIndex:'created_at', width: 200},
-              {title:'更新时间',dataIndex:'updated_at', width: 200},
-              {title:'操作',fixed:'right',scopedSlots: { customRender: 'action' }},
-          ],
-          list:[]
+          search: {
+              fields: [
+                  {
+                      label: '编码',
+                      name: 'code',
+                      type: 'text'
+                  },
+                  {
+                      label: '名称',
+                      name: 'name',
+                      type: 'text'
+                  },
+                  {
+                      label: '简称',
+                      name: 'short',
+                      type: 'text'
+                  },
+                  {
+                      label: '别名',
+                      name: 'alias',
+                      type: 'text'
+                  },
+                  {
+                      label: '显示名称',
+                      name: 'display',
+                      type: 'text'
+                  },
+                  {
+                      label: '描述',
+                      name: 'description',
+                      type: 'text'
+                  }
+              ]
+          },
+          exporting:{ // 数据导出
+              url: this.$api.moduleAdminBases,
+              columns: [
+                  {
+                      label: '编码',
+                      name: 'code',
+                  },
+                  {
+                      label: '名称',
+                      name: 'name',
+                  },
+                  {
+                      field: 'short',
+                      name: '简称',
+                  },
+                  {
+                      field: 'display',
+                      name: '显示名称',
+                  },
+                  {
+                      field: 'description',
+                      name: '描述',
+                  }
+              ]
+          }
 
       };
     },
     watch: {},
     computed: {},
     methods: {
-        // 查询条件
-        onSearchParams(search){
-            this.searchParams = search;
-            this.getList();
-        },
-        // 选择框被点击
-        onSelectChange(selectedRowKeys) {
-            this.selectedRowKeys = selectedRowKeys;
-        },
-        // 选择分页
-        onChange(e){
-            this.params.page = e;
-        },
-        // 删除
-        del(){
-            if(this.selectedRowKeys.length===0){
-                return this.$message.error('未选择数据.');
-            }
-            this.$confirm({
-                title: '你确定要删除选择的数据？',
-                content: '确定删除后无法恢复.',
-                okText: '是',
-                okType: 'danger',
-                cancelText: '取消',
-                onOk:()=> {
-                    let ids = this.selectedRowKeys.join(',');
-                    this.$delete(this.$api.moduleAdminBases+'/'+ids).then(res=>{
-                        if(res.code === 200){
-                            this.onload();
-                            this.$message.success('删除成功');
-                        }else{
-                            this.$message.error(res.msg)
-                        }
-                    });
 
-                },
-            });
-        },
-        getList(){
-            this.list_loading = true;
-            const params = Object.assign({}, this.searchParams, this.params);
-            this.$get(this.$api.moduleAdminBases, params).then(res=>{
-                if (res.code === 200){
-                    this.total = res.data.total;
-                    this.list = res.data.data;
-                }
-                this.list_loading = false;
-            }, err=>{
-                this.$message.error('数据加载失败');
-                this.list_loading = false;
-            });
-        },
         onload(){
-            this.getList();
+            // 加载混入中的表格数据
+            this.loadTableData();
         },
 
     },

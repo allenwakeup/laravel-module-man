@@ -1,6 +1,6 @@
 import {USER_INFO, STORE_ADMIN, USER_PREFERENCE} from '@/plugins/constant'
 import {moduleStorageHelpers} from '@/plugins/function'
-import {MUT_SET_PREFERENCE, MUT_SET_BUSY} from '@/store/mutation-types'
+import {MUT_SET_PREFERENCE, MUT_SET_BUSY, MUT_SET_HEIGHT} from '@/store/mutation-types'
 
 const {readStorage} = moduleStorageHelpers(STORE_ADMIN)
 
@@ -8,7 +8,8 @@ const {readStorage} = moduleStorageHelpers(STORE_ADMIN)
 const state = {
     common: {},
     preferences: {},
-    busy: false
+    busy: false,
+    height: 0
 }
 
 // getters
@@ -36,7 +37,10 @@ const getters = {
         return getters.pref[key];
     },
 
-    isBusy: state => state.busy === true
+    isBusy: state => state.busy === true,
+
+    height: state => state.height
+
 }
 
 // actions
@@ -60,6 +64,10 @@ const actions = {
     },
     gettingBusy({commit}, data) {
         commit(MUT_SET_BUSY, data)
+    },
+
+    setHeight({commit}, data) {
+        commit(MUT_SET_HEIGHT, data)
     }
 }
 
@@ -70,6 +78,9 @@ const mutations = {
     },
     [MUT_SET_BUSY](state, payload){
         state.busy = payload;
+    },
+    [MUT_SET_HEIGHT](state, payload){
+        state.height = payload;
     }
 }
 

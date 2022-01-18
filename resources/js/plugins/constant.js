@@ -24,3 +24,8 @@ export const MENU_SELETED = 'menu_selected';
 
 // common/user preference
 export const USER_PREFERENCE = 'user_pref';
+
+
+export const DEF_DATE_FORMAT = 'YYYY-MM-DD';
+export const DEF_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const APPEND_DATE_TIME_FORMAT = 'YYYYMMDDHHmmss';

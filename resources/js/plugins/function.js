@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import {message} from 'ant-design-vue';
+import XLSX from 'xlsx';
+import moment from "moment";
+
 export function formatDate (date, fmt) {
     if (/(y+)/.test(fmt)) {
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
@@ -20,6 +23,10 @@ export function formatDate (date, fmt) {
     return fmt;
 }
 
+export function toDateString(str, from = 'YYYY-MM-DD', to = 'YYYY-MM-DD'){
+    return isEmpty(str) ? str : moment(str, from).format(to)
+}
+
 export function getSession(name){
     let token_type = sessionStorage.getItem(name);
     return localStorage.getItem(token_type);
@@ -27,6 +34,28 @@ export function getSession(name){
 
 export function isArray(obj) {
     return Object.prototype.toString.call(obj).slice(8, -1) === 'Array';
+}
+
+export function appendObjectKeys(target, source){
+    Object.keys(source).forEach(k => {
+        if(source.hasOwnProperty(k)){
+            const val = source[k];
+            const val_type = typeof source[k];
+            switch(val_type){
+                case 'string':
+                    if(!isEmpty(val)){
+                        target[k] = val;
+                    }
+                    break;
+                case 'number':
+                case 'object':
+                case 'boolean':
+                    target[k] = val;
+                    break;
+            }
+        }
+    });
+    return target;
 }
 
 export function returnInfo(res){
@@ -234,6 +263,37 @@ export function hasRoute(vueRouter, route_resolve){
             reject(err)
         }
     });
+}
+
+export function exportXls(res = {}){
+    let createXLSLFormatObj = [];
+    let newXlsHeader = [];
+    if (!!res.columns && res.columns.length === 0){
+        return;
+    }
+    if (!!res.data && res.data.length === 0){
+        return;
+    }
+    res.columns.forEach(value => newXlsHeader.push(value.label));
+
+    createXLSLFormatObj.push(newXlsHeader);
+    res.data.forEach((value, index) => {
+        let innerRowData = [];
+        res.columns.forEach((val, index) => {
+            if (val.dataFormat && typeof val.dataFormat === 'function') {
+                innerRowData.push(val.dataFormat(value[val.name], value));
+            }else {
+                innerRowData.push(value[val.name]);
+            }
+        });
+        createXLSLFormatObj.push(innerRowData);
+    });
+
+
+    let wb = XLSX.utils.book_new(),
+        ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+    XLSX.utils.book_append_sheet(wb, ws, (res.sheetName || 'New Sheet'));
+    XLSX.writeFile(wb, (res.fileName || '数据导出') + ".xlsx");
 }
 
 function padLeftZero (str) {

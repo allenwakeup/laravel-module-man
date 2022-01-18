@@ -1,5 +1,5 @@
 import {STORE_ADMIN, TOKEN, IS_LOGIN, USER_INFO} from '@/plugins/constant'
-import {MUT_LOGIN, MUT_LOGOUT} from '@/store/mutation-types'
+import {MUT_LOGIN, MUT_LOGOUT, MUT_UPDATE_USER_INFO} from '@/store/mutation-types'
 import {moduleStorageHelpers} from '@/plugins/function'
 
 const {writeStorage, readStorage, removeStorage} = moduleStorageHelpers(STORE_ADMIN)
@@ -7,13 +7,15 @@ const {writeStorage, readStorage, removeStorage} = moduleStorageHelpers(STORE_AD
 // initial state
 const state = {
     isLogin: false,
-    userInfo: {}
+    userInfo: {},
+    token: '',
 }
 
 // getters
 const getters = {
     userInfo: state => Object.keys(state.userInfo).length > 0 ? state.userInfo : (readStorage (USER_INFO) || {}),
-    isLogin: state => state.isLogin || readStorage (IS_LOGIN)
+    isLogin: state => state.isLogin || readStorage (IS_LOGIN),
+    token: state => state.token || readStorage (TOKEN),
 }
 
 // actions
@@ -42,8 +44,9 @@ const actions = {
 
         })
     },
-    update({state}, data){
+    update({ commit }, data){
         writeStorage(USER_INFO, data.user_info)
+        commit(MUT_UPDATE_USER_INFO, data)
     }
 }
 
@@ -52,11 +55,15 @@ const mutations = {
     [MUT_LOGIN](state, payload){
         state.isLogin = payload.is_login;
         state.userInfo = payload.user_info;
+        state.token = payload.token;
     },
     [MUT_LOGOUT](state){
         state.isLogin = false;
         state.userInfo = {};
         removeStorage(TOKEN)
+    },
+    [MUT_UPDATE_USER_INFO](state, payload){
+        state.userInfo = Object.assign({}, state.userInfo, payload.user_info);
     }
 }
 

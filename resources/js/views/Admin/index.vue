@@ -12,8 +12,9 @@
                     <template v-for="vo in (v.children||[])">
                         <a-menu-item v-if="$isEmpty(vo.children) || vo.children.length===0" :key="vo.id + ''"  @click="toNav(vo.link, vo.id)"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" />{{vo.name}}</a-menu-item>
                         <a-sub-menu v-else :key="vo.id + ''">
-                            <span slot="title"><a-font class="afont menu_icon" v-if="!!vo.icon" :type="vo.icon" /><span>{{vo.name}}</span></span>
-                            <a-menu-item  @click="toNav(vo2.link, vo2.id)" v-for="vo2 in (vo.children||[])" :key="vo2.id + ''"><a-font class="afont menu_icon" v-if="!!vo2.icon" :type="vo2.icon" />{{vo2.name}}</a-menu-item>
+                            <span slot="title"><a-font :type="vo.icon"></a-font><span>{{vo.name}}</span></span>
+                            <a-menu-item  @click="toNav(vo2.link, vo2.id)" v-for="vo2 in (vo.children||[])" :key="vo2.id + ''">
+                                <a-font :type="vo2.icon"></a-font>{{vo2.name}}</a-menu-item>
                         </a-sub-menu>
                     </template>
                 </a-sub-menu>
@@ -32,38 +33,40 @@
                     </a-menu>
                 </div>
                 <div class="item_right float_right">
-                    <a-dropdown>
-                        <div class="admin_top_person" @click="e => e.preventDefault()">
-                            <a-icon  v-show="isBusy" type="loading" class="icon-busy" />
-                            <a-avatar v-show="!isBusy" class="avatar" size="small" icon="user" :src="userInfo.avatar" />
-                            <span>{{userInfo.nickname}}</span>
+                    <div class="menu_right_content">
+                        <div class="quick_btns">
+                            <fullscreen class="quick_btn"/>
                         </div>
-                        <a-menu slot="overlay">
-                            <a-menu-item key="0">
-                                <a target="_blank" rel="noopener noreferrer" href="/">--</a>
-                            </a-menu-item>
-                            <a-menu-item key="1">
-                                <a target="_blank" rel="noopener noreferrer" href="/">--</a>
-                            </a-menu-item>
-                            <a-menu-divider />
-                            <a-menu-item key="3" @click="logout">
-                                <a-icon style="color:red" type="logout"></a-icon>
-                                <font color="red">退出后台</font>
-                            </a-menu-item>
-                        </a-menu>
-                    </a-dropdown>
+                        <a-dropdown class="dropdown_right" overlayClassName="person_menu">
+                            <div class="admin_top_person" @click="e => e.preventDefault()">
+                                <a-icon  v-show="isBusy" type="loading" class="icon-busy" />
+                                <a-avatar v-show="!isBusy" class="avatar" size="small" icon="user" :src="userInfo.avatar"/>
+                                <a-icon type="down" />
+                            </div>
+                            <a-menu slot="overlay">
+                                <a-menu-item key="0" @click="toNav('/Admin/index', 0)">
+                                    <a-icon type="home" />
+                                    <span>系统首页</span>
+                                </a-menu-item>
+                                <a-menu-item key="1" @click="logout">
+                                    <a-icon style="color:red" type="logout" />
+                                    <span style="color:red">退出后台</span>
+                                </a-menu-item>
+                            </a-menu>
+                        </a-dropdown>
+                    </div>
                 </div>
                 <div class="clear"></div>
                 <a-progress v-if="isBusy"
-                            class="progress-bar"
-                            :show-info="false"
-                            :stroke-width="5"
-                            :stroke-color="{
-                            from: '#108ee9',
-                            to: '#87d068',
-                        }"
-                            :percent="progressBar.percent"
-                            status="active"
+                    class="progress-bar"
+                    :show-info="false"
+                    :stroke-width="5"
+                    :stroke-color="{
+                        from: '#108ee9',
+                        to: '#87d068',
+                    }"
+                    :percent="progressBar.percent"
+                    status="active"
                 />
             </a-layout-header>
 
@@ -110,7 +113,7 @@
 </template>
 
 <script>
-
+import Fullscreen from '@/components/fullscreen'
 import { createNamespacedHelpers } from 'vuex'
 import { STORE_ADMIN_LOGIN, STORE_ADMIN_COMMON } from '@/plugins/constant'
 import { getMenuPathById } from '@/plugins/function'
@@ -119,7 +122,7 @@ const adminLoginStore = createNamespacedHelpers(STORE_ADMIN_LOGIN)
 const adminCommonStore = createNamespacedHelpers(STORE_ADMIN_COMMON)
 
 export default {
-    components: {},
+    components: { Fullscreen },
     props: {},
     data() {
         return {
@@ -183,7 +186,8 @@ export default {
         }),
         ...adminCommonStore.mapActions({
             selectMenu: 'selectMenu',
-            setTopBusy: 'gettingBusy'
+            setTopBusy: 'gettingBusy',
+            setHeight: 'setHeight'
         }),
         // 收缩菜单
         toggleCollapsed() {
@@ -198,26 +202,28 @@ export default {
         getMenus(){
             this.setTopBusy(true);
             this.$get(this.$api.adminMenus).then(res=>{
-                if(window.menuType){
-                    const menus = res.data.filter(menu => menu.is_type === window.menuType);
-                    if(menus && menus.length > 0){
-                        this.menus = menus[0].children;
-                    }
-                }else{
-                    this.menus = res.data;
-                }
-
-                this.topMenus = res.data.filter(menu => menu.is_type > 100);
-
-                if(this.pref.menu){
-                    if(!this.$isEmpty(this.pref.menu.route)){
-                        if(this.$route.path !== this.pref.menu.route){
-                            this.setTopBusy(false);
-                            this.$router.push(this.pref.menu.route);
+                if(res.code === 200){
+                    if(window.menuType){
+                        const menus = res.data.filter(menu => menu.is_type === window.menuType);
+                        if(menus && menus.length > 0){
+                            this.menus = menus[0].children;
                         }
+                    }else{
+                        this.menus = res.data;
                     }
-                    if(this.pref.menu.selected && this.pref.menu.selected.length > 0){
-                        this.defaultOpenKeys = this.pref.menu.selected;
+
+                    this.topMenus = res.data.filter(menu => menu.is_type > 100);
+
+                    if(this.pref.menu){
+                        if(!this.$isEmpty(this.pref.menu.route)){
+                            if(this.$route.path !== this.pref.menu.route){
+                                this.setTopBusy(false);
+                                this.$router.push(this.pref.menu.route);
+                            }
+                        }
+                        if(this.pref.menu.selected && this.pref.menu.selected.length > 0){
+                            this.defaultOpenKeys = this.pref.menu.selected;
+                        }
                     }
                 }
                 this.setTopBusy(false);
@@ -272,9 +278,9 @@ export default {
         // 退出后台
         logout(){
             const vm = this;
-
             this.$get(this.$api.adminLogout).then(res=>{
                 this.$message.success(res.msg);
+
                 vm.storeLogout();
                 setTimeout(function() {window.location.href = '/Admin/login';}, 1000);
 
@@ -299,8 +305,10 @@ export default {
                 window.screenWidth = document.body.clientWidth
                 _this.screenWidth = window.screenWidth
                 _this.onScreenWidth();
+                this.setHeight(document.body.clientHeight);
             })()
         }
+        this.setHeight(document.body.clientHeight);
     },
     beforeRouteUpdate (to, from, next) {
         // console.log(to,from);
@@ -327,7 +335,6 @@ export default {
     // -moz-transform: scale3d(1, 1, 1);
     // -webkit-transform: scale3d(1, 1, 1);
     position: relative;
-    min-height: 700px;
     background: #efefef;
     &:after{
         display: block;
@@ -363,6 +370,21 @@ export default {
         .item_right{
             justify-content:flex-end;
             margin-right: 15px;
+            .menu_right_content{
+                width: 90px;
+                .quick_btns {
+                    float:left;
+                    line-height: 56px;
+
+                    .quick_btn{
+                        margin: 0 7px;
+
+                    }
+                }
+                .dropdown_right {
+                    float:right;
+                }
+            }
             .admin_top_person{
                 cursor: pointer;
                 .avatar{margin-top: -4px;margin-right: 4px;}
@@ -374,12 +396,16 @@ export default {
 
 
                 }
+
             }
+
+
         }
         .top-menu{
             width: 70%;
             float: left;
         }
+
         .progress-bar{
             position:absolute;
             margin-top: -12px;
@@ -388,12 +414,12 @@ export default {
     }
     .admin_content_view{
         position: relative;
-        margin: 72px 20px 22px 20px;
-        padding: 15px 20px;
+        margin: 56px 10px 0 10px;
+        padding: 15px 15px;
         background: #fff;
         // overflow: initial;
         border-radius: 4px;
-        height: auto;
+        // height: calc(100vh - 64px);
         border:1px solid #e7eaec!important;
         &:after{
             content:'';
@@ -406,8 +432,8 @@ export default {
     }
     .admin_content_view2{
         position: relative;
-        margin: 62px 20px 22px 20px;
-        padding: 15px 20px;
+        margin: 45px 0 0 0;
+        padding: 12px 0;
         // overflow: initial;
         height: auto;
         &:after{
@@ -441,7 +467,6 @@ export default {
 
         img{
             height: 48px;
-            width: 48px;
             margin-top: -5px;
         }
         span{
@@ -462,9 +487,22 @@ export default {
     }
 
 }
+
 .icon-busy ::v-deep .anticon-spin {
     animation: loadingCircle 0.3s infinite linear;
     -webkit-animation: loadingCircle 0.3s infinite linear;
     -moz-animation: loadingCircle 0.3s infinite linear;
+}
+.person_menu {
+    div.name {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 10px 10px 5px 10px;
+    }
+
+    div.account {
+        font-size: 1em;
+        padding: 0 50px 10px 10px;
+    }
 }
 </style>

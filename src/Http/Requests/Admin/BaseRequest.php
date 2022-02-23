@@ -21,7 +21,7 @@ class BaseRequest extends FormRequest
     {
         $rules = [
             'code' => ['required', 'max:20', $this->uniqueOrExists (Base::class, 'code') . ':man_bases'],
-            'name' => 'max:20',
+            'name' => ['required','max:20'],
             'short' => 'max:20',
             'alias' => 'max:20',
             'display' => 'max:20',

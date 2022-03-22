@@ -177,7 +177,7 @@ export default {
             'isBusy'
         ]),
         defaultSelectedKeys() {
-            return this.pref.menu ? this.pref.menu.selected : []
+            return this.pref.menu && this.pref.menu.selected ? this.pref.menu.selected : []
         }
     },
     methods: {

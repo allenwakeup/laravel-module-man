@@ -115,7 +115,7 @@ class BaseRepository extends Repository
                                 $baseId = DB::table('man_bases')->insertGetId([
                                     'name' => $current,
                                     'code' => $path,
-                                    'description' => $current,
+                                    'description' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -126,7 +126,7 @@ class BaseRepository extends Repository
                                     'name' => $current,
                                     'code' => $path,
                                     'base_id' => $baseId,
-                                    'description' => $current,
+                                    'description' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -137,7 +137,7 @@ class BaseRepository extends Repository
                                     'name' => $current,
                                     'code' => $path,
                                     'factory_id' => $factoryId,
-                                    'description' => $current,
+                                    'description' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -149,7 +149,7 @@ class BaseRepository extends Repository
                                     'code' => $path,
                                     'workshop_id' => $workshopId,
                                     'item_id' => 0,
-                                    'description' => $current,
+                                    'description' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);

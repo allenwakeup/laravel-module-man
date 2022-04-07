@@ -116,6 +116,8 @@ class BaseRepository extends Repository
                                     'name' => $current,
                                     'code' => $path,
                                     'description' => $path,
+                                    'display' => $path,
+                                    'alias' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -127,6 +129,8 @@ class BaseRepository extends Repository
                                     'code' => $path,
                                     'base_id' => $baseId,
                                     'description' => $path,
+                                    'display' => $path,
+                                    'alias' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -138,6 +142,8 @@ class BaseRepository extends Repository
                                     'code' => $path,
                                     'factory_id' => $factoryId,
                                     'description' => $path,
+                                    'display' => $path,
+                                    'alias' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -150,6 +156,8 @@ class BaseRepository extends Repository
                                     'workshop_id' => $workshopId,
                                     'item_id' => 0,
                                     'description' => $path,
+                                    'display' => $path,
+                                    'alias' => $path,
                                     'created_at' => date('Y-m-d H:i:s'),
                                     'updated_at' => date('Y-m-d H:i:s'),
                                 ]);
@@ -172,7 +180,6 @@ class BaseRepository extends Repository
                                 break;
                         }
                     }
-
                 }
                 return $path;
             },'');

@@ -15,6 +15,18 @@ use Illuminate\Support\Arr;
 
 class ProcessRepository extends Repository
 {
+    public static function group()
+    {
+        return Process::query()->with('workshop')->get()
+            ->transform(function ($item){
+                $item->value = $item->id;
+                $item->title = $item->name;
+                $item->text = $item->name;
+                $item->label = $item->name;
+                return $item;
+            })
+            ->groupBy('workshop.id');
+    }
 
     public static function list($perPage, $condition = [], $keyword = null)
     {

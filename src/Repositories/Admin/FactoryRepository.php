@@ -13,6 +13,18 @@ use Illuminate\Support\Arr;
 
 class FactoryRepository extends Repository
 {
+    public static function group()
+    {
+        return Factory::query()->with('base')->get()
+            ->transform(function ($item){
+                $item->value = $item->id;
+                $item->title = $item->name;
+                $item->text = $item->name;
+                $item->label = $item->name;
+                return $item;
+            })
+            ->groupBy('base.id');
+    }
 
     public static function list($perPage, $condition = [], $keyword = null)
     {

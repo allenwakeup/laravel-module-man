@@ -33,7 +33,9 @@ class WorkshopController extends Controller
         } else if ($data_type === 'cascader') {
             $condition = $request->only ([ 'base_id', 'factory_id' ]);
             $data = WorkshopRepository::cascader ($condition, $request->get($data_type), $request->keyword);
-        } else {
+        } else if($data_type === 'group'){
+            $data = WorkshopRepository::group ();
+        }else {
             $data = WorkshopRepository::list(
                 $request->per_page??30,
                 $condition,

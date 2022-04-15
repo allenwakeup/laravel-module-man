@@ -31,6 +31,8 @@ class FactoryController extends Controller
         } else if ($data_type === 'cascader') {
             $condition = $request->only ([ 'base_id' ]);
             $data = FactoryRepository::cascader ($condition, $request->get($data_type), $request->keyword);
+        } else if($data_type === 'group'){
+            $data = FactoryRepository::group ();
         } else {
             $data = FactoryRepository::list(
                 $request->per_page??30,

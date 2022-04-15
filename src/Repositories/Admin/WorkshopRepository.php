@@ -14,6 +14,18 @@ use Illuminate\Support\Arr;
 
 class WorkshopRepository extends Repository
 {
+    public static function group()
+    {
+        return Workshop::query()->with('factory')->get()
+            ->transform(function ($item){
+                $item->value = $item->id;
+                $item->title = $item->name;
+                $item->text = $item->name;
+                $item->label = $item->name;
+                return $item;
+            })
+            ->groupBy('factory.id');
+    }
 
     public static function list($perPage, $condition = [], $keyword = null)
     {

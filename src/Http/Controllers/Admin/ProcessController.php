@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Goodcatch\Modules\Manufacturing\Http\Requests\Admin\ProcessRequest;
 use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\ProcessResource\ProcessCollection;
 use Goodcatch\Modules\Manufacturing\Repositories\Admin\ProcessRepository;
+use Goodcatch\Modules\Manufacturing\Repositories\Admin\WorkshopRepository;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -34,7 +35,9 @@ class ProcessController extends Controller
         } else if ($data_type === 'cascader') {
             $condition = $request->only ([ 'base_id', 'factory_id', 'workshop_id' ]);
             $data = ProcessRepository::cascader ($condition, $request->get($data_type), $request->keyword);
-        } else {
+        } else if($data_type === 'group'){
+            $data = ProcessRepository::group ();
+        }else {
             $data = ProcessRepository::list(
                 $request->per_page??30,
                 $condition,

@@ -70,22 +70,28 @@ class BaseRepository extends Repository
         return Base::destroy ($id);
     }
 
-    public static function import(array $data_list,$baseColName='base',$factoryColName='factory',$workshopColName='workshop',$processColName='process')
-    {
+    public static function getBases(){
         $totals = Base::query()->with(['factories.workshops.processes'])->get();
         $bases = [];
         foreach ($totals as $base){
             Arr::set($bases,$base->name,$base->id);
             foreach ($base->factories as $factory){
-                Arr::set($bases,"{$base->name}{$factory->name}",$factory->id);
+                Arr::set($bases,"{$base->name}/{$factory->name}",$factory->id);
                 foreach ($factory->workshops as $workshop){
-                    Arr::set($bases,"{$base->name}{$factory->name}{$workshop->name}",$workshop->id);
+                    Arr::set($bases,"{$base->name}/{$factory->name}/{$workshop->name}",$workshop->id);
                     foreach ($workshop->processes as $process){
-                        Arr::set($bases,"{$base->name}{$factory->name}{$workshop->name}{$process->name}",$process->id);
+                        Arr::set($bases,"{$base->name}/{$factory->name}/{$workshop->name}/{$process->name}",$process->id);
                     }
                 }
             }
         }
+        return $bases;
+    }
+
+
+    public static function import(array $data_list,$baseColName='base',$factoryColName='factory',$workshopColName='workshop',$processColName='process')
+    {
+        $bases = self::getBases();
         $added = 0;
         \collect($data_list)->each(function ($data) use ($processColName, $workshopColName, $factoryColName, $baseColName,&$bases, &$added) {
             $baseName = trim(Arr::get($data, $baseColName));
@@ -97,16 +103,20 @@ class BaseRepository extends Repository
             $factoryId = 0;
             $workshopId = 0;
             collect([$baseName,$factoryName,$workshopName,$processName])->reduce(function ($path,$current,$key) use (
-                $bases,
+                &$bases,
                 &$added,
                 &$baseId,
                 &$factoryId,
                 &$workshopId
             ) {
+                if(empty($current)){
+                    // 没有填写工序则忽略
+                    return $path;
+                }
                 if(empty($path)){
                     $path = $current;
                 }else{
-                    $path = $path.$current;
+                    $path = $path.'/'.$current;
                 }
                 if($path){
                     if(!Arr::exists($bases,$path)){

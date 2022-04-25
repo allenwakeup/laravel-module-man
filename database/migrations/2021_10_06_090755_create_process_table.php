@@ -20,7 +20,7 @@ class CreateProcessTable extends Migration
             $table->string('code', 20)->nullable(false)->comment('编码');
             $table->string('name', 20)->nullable(false)->comment('名称');
             $table->string('short', 10)->nullable()->comment('简称');
-            $table->string('alias', 20)->nullable()->comment('别名');
+            $table->string('alias', 50)->nullable()->comment('别名');
             $table->string('display', 20)->nullable()->comment('显示名称');
             $table->string ('description', 255)->nullable ()->comment ('描述');
             $table->integer('order')->nullable(false)->default (0)->comment('排序');

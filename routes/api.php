@@ -29,6 +29,7 @@ Route::group(
             Route::namespace('Admin')->prefix('goodcatch')->group(function(){
                 Route::prefix(module_route_prefix())->group(function(){
                     Route::prefix('man')->name('admin.')->group(function(){
+
                         Route::group(['middleware'=>'jwt.admin'], function(){
                             Route::apiResources([
                                 'bases'=>'BaseController', // 生产基地
@@ -44,6 +45,19 @@ Route::group(
                                 ]
                             ]);
                         });
+
+                        Route::middleware('throttle:' . config('api.rate_limits.sign'))
+                            ->group(function () {
+                                // 登录
+                                Route::post('authorizations', 'AuthorizationsController@store')
+                                    ->name('authorizations.store');
+                                // 刷新token
+                                Route::put('authorizations/current', 'AuthorizationsController@update')
+                                    ->name('authorizations.update');
+                                // 删除token
+                                Route::delete('authorizations/current', 'AuthorizationsController@destroy')
+                                    ->name('authorizations.destroy');
+                            });
                     });
                 });
             });

@@ -5,7 +5,12 @@ return [
 
     'auth' => [
         'guards' => [
-            'api' => 'device'
+            'api' => 'device',
+            // 下面作为android登录验证时使用
+//            'app' => [
+//                'driver' => 'jwt',
+//                'provider' => 'admins',
+//            ],
         ]
     ],
 

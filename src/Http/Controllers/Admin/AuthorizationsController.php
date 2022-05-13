@@ -8,28 +8,28 @@ use App\Http\Controllers\Controller;
 
 class AuthorizationsController extends Controller
 {
-    public function store(AuthorizationRequest $request)
+    public function store(AuthorizationRequest $request,$guard = 'admin')
     {
         $username = $request->username;
 
         $credentials['username'] = $username;
         $credentials['password'] = $request->password;
 
-        if (!$token = \Auth::guard('app')->attempt($credentials)) {
+        if (!$token = \Auth::guard($guard)->attempt($credentials)) {
             return $this->error(trans('auth.failed'),null);
         }
         return $this->success($this->respondWithToken($token));
     }
 
-    public function update()
+    public function update($guard = 'admin')
     {
-        $token = auth('app')->refresh();
+        $token = auth($guard)->refresh();
         return $this->success($this->respondWithToken($token));
     }
 
-    public function destroy()
+    public function destroy($guard = 'admin')
     {
-        auth('app')->logout();
+        auth($guard)->logout();
         return $this->success(null);
     }
 
@@ -38,7 +38,7 @@ class AuthorizationsController extends Controller
         return [
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'expires_in' => auth('app')->factory()->getTTL() * 60
+            'expires_in' => auth('admin')->factory()->getTTL() * 60
         ];
     }
 }

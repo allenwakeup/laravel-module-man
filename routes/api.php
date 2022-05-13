@@ -49,13 +49,13 @@ Route::group(
                         Route::middleware('throttle:' . config('api.rate_limits.sign'))
                             ->group(function () {
                                 // 登录
-                                Route::post('authorizations', 'AuthorizationsController@store')
+                                Route::post('authorizations/{guard?}', 'AuthorizationsController@store')
                                     ->name('authorizations.store');
                                 // 刷新token
-                                Route::put('authorizations/current', 'AuthorizationsController@update')
+                                Route::put('authorizations/current/{guard?}', 'AuthorizationsController@update')
                                     ->name('authorizations.update');
                                 // 删除token
-                                Route::delete('authorizations/current', 'AuthorizationsController@destroy')
+                                Route::delete('authorizations/current/{guard?}', 'AuthorizationsController@destroy')
                                     ->name('authorizations.destroy');
                             });
                     });

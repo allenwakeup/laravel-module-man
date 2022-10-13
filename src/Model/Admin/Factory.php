@@ -54,5 +54,10 @@ class Factory extends Model
         return $this->hasMany('Goodcatch\Modules\Manufacturing\Model\Admin\Workshop');
     }
 
+    public function children ()
+    {
+        return $this->hasMany('Goodcatch\Modules\Manufacturing\Model\Admin\Workshop');
+    }
+
 
 }

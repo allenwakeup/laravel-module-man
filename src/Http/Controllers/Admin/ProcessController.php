@@ -8,6 +8,7 @@ namespace Goodcatch\Modules\Manufacturing\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Goodcatch\Modules\Manufacturing\Http\Requests\Admin\ProcessRequest;
 use Goodcatch\Modules\Manufacturing\Http\Resources\Admin\ProcessResource\ProcessCollection;
+use Goodcatch\Modules\Manufacturing\Model\Admin\Base;
 use Goodcatch\Modules\Manufacturing\Repositories\Admin\ProcessRepository;
 use Goodcatch\Modules\Manufacturing\Repositories\Admin\WorkshopRepository;
 use Illuminate\Database\QueryException;
@@ -109,6 +110,16 @@ class ProcessController extends Controller
         });
         try{
             $data = ProcessRepository::delete($idArray);
+            return $this->success($data, __('base.success'));
+        } catch (QueryException $e) {
+            return $this->error(__('base.error') . $e->getMessage());
+        }
+    }
+
+    public function tree()
+    {
+        try{
+            $data = ProcessRepository::treeLevel();
             return $this->success($data, __('base.success'));
         } catch (QueryException $e) {
             return $this->error(__('base.error') . $e->getMessage());

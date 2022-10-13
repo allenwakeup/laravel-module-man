@@ -52,4 +52,9 @@ class Workshop extends Model
     {
         return $this->hasMany('Goodcatch\Modules\Manufacturing\Model\Admin\Process');
     }
+
+    public function children ()
+    {
+        return $this->hasMany('Goodcatch\Modules\Manufacturing\Model\Admin\Process');
+    }
 }

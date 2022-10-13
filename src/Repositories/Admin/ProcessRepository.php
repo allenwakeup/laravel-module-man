@@ -179,4 +179,37 @@ class ProcessRepository extends Repository
     {
         return Process::destroy($id);
     }
+
+    public static function treeLevel()
+    {
+        $bases = Base::query()->with([
+            'children:id,name,base_id',
+            'children.children:id,name,factory_id',
+            'children.children.children:id,name,workshop_id'
+        ])->select('id', 'name')->get();
+
+        $bases->transform(function ($base) {
+            $base = self::makeTreeNode($base, 'base');
+            $base->children->transform(function ($factory) {
+                $factory = self::makeTreeNode($factory,'factory');
+                $factory->children->transform(function ($workshop) {
+                    $workshop = self::makeTreeNode($workshop,'workshop');
+                    $workshop->children->transform(function ($process) {
+                        return self::makeTreeNode($process,'process',$process->id);
+                    });
+                    return $workshop;
+                });
+                return $factory;
+            });
+            return $base;
+        });
+        return $bases;
+    }
+
+    public static function makeTreeNode($item,$keyPrefix,$value='')
+    {
+        $item->value = $value;
+        $item->key = "{$keyPrefix}_{$item->id}";
+        return $item;
+    }
 }

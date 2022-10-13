@@ -29,8 +29,8 @@ Route::group(
             Route::namespace('Admin')->prefix('goodcatch')->group(function(){
                 Route::prefix(module_route_prefix())->group(function(){
                     Route::prefix('man')->name('admin.')->group(function(){
-
                         Route::group(['middleware'=>'jwt.admin'], function(){
+                            Route::get('processes/tree','ProcessController@tree')->name('processes.tree');
                             Route::apiResources([
                                 'bases'=>'BaseController', // 生产基地
                                 'factories'=>'FactoryController', // 工厂

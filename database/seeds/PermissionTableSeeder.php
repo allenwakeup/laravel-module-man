@@ -77,7 +77,9 @@ class PermissionTableSeeder extends Seeder
             ],
             // 工序管理
             $this->getSeedsModuleMenuGroupName(self::MODULE_ALIAS, '工序管理',) => [
-                self::MODULE_API_PREFIX . '::admin.processes'
+                 self::MODULE_API_PREFIX . '::admin.processes' => array_merge($this->api_actions, [
+                    'tree' => ['name' => '工序树级结构', 'content' => '工序树级结构'],
+                ])
             ]
         ];
     }

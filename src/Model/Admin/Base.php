@@ -43,4 +43,9 @@ class Base extends Model
         return $this->hasMany('Goodcatch\Modules\Manufacturing\Model\Admin\Factory');
     }
 
+    public function children ()
+    {
+        return $this->hasMany('Goodcatch\Modules\Manufacturing\Model\Admin\Factory');
+    }
+
 }

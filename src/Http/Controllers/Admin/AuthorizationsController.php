@@ -16,7 +16,7 @@ class AuthorizationsController extends Controller
         $credentials['password'] = $request->password;
 
         if (!$token = \Auth::guard($guard)->attempt($credentials)) {
-            return $this->error(trans('auth.failed'),null);
+            return $this->error(trans('auth.failed'));
         }
         return $this->success($this->respondWithToken($token));
     }

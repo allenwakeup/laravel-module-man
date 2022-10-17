@@ -189,13 +189,13 @@ class ProcessRepository extends Repository
         ])->select('id', 'name')->get();
 
         $bases->transform(function ($base) {
-            $base = self::makeTreeNode($base, 'base');
+            $base = self::makeTreeNode($base, 'b',$base->id);
             $base->children->transform(function ($factory) {
-                $factory = self::makeTreeNode($factory,'factory');
+                $factory = self::makeTreeNode($factory,'f');
                 $factory->children->transform(function ($workshop) {
-                    $workshop = self::makeTreeNode($workshop,'workshop');
+                    $workshop = self::makeTreeNode($workshop,'w');
                     $workshop->children->transform(function ($process) {
-                        return self::makeTreeNode($process,'process',$process->id);
+                        return self::makeTreeNode($process,'p',$process->id);
                     });
                     return $workshop;
                 });

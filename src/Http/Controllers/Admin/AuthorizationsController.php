@@ -20,6 +20,14 @@ class AuthorizationsController extends Controller
                 'expires_in' => ''
             ]);
         }
+        $user = \Auth::guard($guard)->user();
+        if(!$user->isActive()){
+            return $this->error(trans('auth.user_disable'),[
+                'access_token' => '',
+                'token_type' => '',
+                'expires_in' => ''
+            ]);
+        }
         return $this->success($this->respondWithToken($token));
     }
 

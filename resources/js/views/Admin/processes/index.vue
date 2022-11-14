@@ -9,7 +9,7 @@
                     size="small"
                     :columns="table.columns"
                     :data-source="table.data"
-                    :scroll="{ y: sysWindowHeight - 400 }"
+                    :scroll="{ y: sysWindowHeight - 280 }"
                     :loading="table.loading"
                     :pagination="false"
                     :row-selection="{ selectedRowKeys: table.selectedRowKeys, onChange: handleTableRowKeysChange }"

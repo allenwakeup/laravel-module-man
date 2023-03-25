@@ -3,7 +3,7 @@
     "alias": "man",
     "description": "Module Manufacturing manages Factory, Workshop, Process, Device Data, communicate with device",
     "keywords": [],
-    "priority": 1,
+    "priority": 970,
     "order": 99,
     "providers": [
         "Goodcatch\\Modules\\Manufacturing\\Providers\\ManufacturingServiceProvider"
